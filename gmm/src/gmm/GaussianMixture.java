@@ -367,7 +367,7 @@ public final class GaussianMixture implements XMLSerializable
       
       for(int i = 0; i < components.length; i++)
     	  for(int j = 0; j < samplePoints.size(); j++){
-    		  System.out.println("p["+i+","+j+"is "+p_ij[i][j]);
+    		  System.out.println("p["+i+","+j+"] is "+p_ij[i][j]);
     	  }
     	 
       
