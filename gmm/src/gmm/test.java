@@ -85,10 +85,10 @@ public class test {
 		GaussianComponent[] comp = new GaussianComponent[4];
 		int dim = plist.getDimension();
 		//Random pick mean;
-		double[] mean1 = {2.5,5.0,2};
-		double[] mean2 = {13.0,5.0,7};
-		double[] mean3 = {2.5,25.0,2};
-		double[] mean4 = {13.0,18.0,7};
+		double[] mean1 = {0.25,1.0,1};
+		double[] mean2 = {13.0,1.0,12};
+		double[] mean3 = {0.25,25.0,1};
+		double[] mean4 = {13.0,25.0,12};
 		double[][] val = new double[plist.size()][dim];
 		Matrix c1_mean = new Matrix(mean1,3);
 		Matrix c2_mean = new Matrix(mean2,3);
@@ -110,12 +110,35 @@ public class test {
 		return comp;
 	}
 	
+	public static PointList getExamplePointList(){
+		double[][] val = {{0.0,30.271527777777777,1.0},{12.38091645769654,26.567581018518517,2.0},{12.981751190336752,21.258136574074076,3.0},
+				{13.106567695565282,18.268055555555556,4.0},{13.543515759705405,10.222916666666666,5.0},{13.542743357621513,9.239710648148149,6.0},
+				{13.5612127110419,7.210520833333334,7.0},{13.680522687236229,3.179212962962963,8.0}};
+		Matrix data1 = new Matrix(val);
+		PointList plist = new PointList(3);
+		for(int i=0; i<val.length; i++){
+			plist.add(val[i]);
+		}
+		return plist;
+	}
+	
+	public static double[][] getWeightedLogLikelihood(GaussianComponent[] components){
+		double[][] likelihood = new double[8][4];
+		PointList plist = getExamplePointList();
+		for(int i=0; i<plist.size(); i++){
+			Matrix x = plist.get(i);
+			for(int j=0; j<components.length; j++){
+				likelihood[i][j] = components[j].getWeightedSampleProbability(x);
+			}
+		}
+		return likelihood;
+	}
 	
 	
 	public static void main(String[] args){
 
 //		String inputdir = "./Data/sep_train0.txt";
-		String inputdir = "./Data/dir_sep_train_3.txt";
+		String inputdir = "./Data/dir_sep_train0_day.txt";
 		IfileIO fileIO = new FileIOImplementation();
 		Vector<String> inputs = fileIO.fileReadByLine(inputdir);
 		int compacity = inputs.size();
@@ -142,5 +165,14 @@ public class test {
 		for(GaussianComponent comp: components){
 			comp.print();
 		}
+		
+		double[][] exampleLikelihood = getWeightedLogLikelihood(components);
+		for(int i=0; i<8; i++){
+			for(int j=0; j<4; j++){
+				System.out.println(exampleLikelihood[i][j]);
+			}
+			System.out.println("\n");
+		}
+			
 	}
 }
